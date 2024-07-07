@@ -1,0 +1,711 @@
+<div *ngIf="showCreateRulePanels === true">
+    <div class="partsRequest d-flex justify-content-end pe-4">
+        <button class="CDbutton" button mat-flat-button color="primary" (click)="toCreateRule()" *ngIf="hideCreateRuleButton">{{labels.createRule}}</button>
+    </div>
+    <div class="tableSection" *ngIf="hideTable === false">
+        <app-table [prData]="prData"  [tableName]="tableName" (editRow)="editeRow($event)" (duplicateRow)="disable($event)"></app-table>
+    </div>
+    
+        <ng-container *ngIf="createRule">
+            <span class="RuleId" *ngIf="ruleID">{{labels.ruleID}} {{createManualRuleUserData?.ruleId}} </span>
+            <mat-accordion>
+                <form [formGroup]="createManualRuleForm" (ngSubmit)="createManualRuleForm.status === 'VALID' && onSave()">
+                <mat-expansion-panel class="mat-expansion" [expanded]="true">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            {{labels.marketlocation}}
+                        </mat-panel-title>
+                        <mat-panel-description>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+            
+
+                        <div class="flex">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labels.market}}</mat-label>
+                                <mat-select formControlName="market">
+                                    <mat-option *ngFor="let i of marketDropDown" [value]="i"> {{i}} </mat-option>
+                                </mat-select>
+                                <mat-error style="color:red;"
+                                    *ngIf="createManualRuleForm.get('market')?.touched &&  createManualRuleForm.get('market')?.errors ">
+                                    {{labels.fieldrequired}}
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labels.warrantyfactory}}</mat-label>
+                                <mat-select formControlName="warrantyFactory">
+                                    <mat-option *ngFor="let i of warrantyFactoryDropDown" [value]="i"> {{i}} </mat-option>
+                                </mat-select>
+                                <mat-error style="color:red;"
+                                    *ngIf="createManualRuleForm.get('warrantyFactory')?.touched &&  createManualRuleForm.get('warrantyFactory')?.errors ">
+                                    {{labels.fieldrequired}}
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labels.storagelocation}}</mat-label>
+                                <input matInput placeholder="" formControlName="storageLocation">
+                                <!-- <mat-error style="color:red;"
+                                    *ngIf="createManualRuleForm.get('storageLocation')?.touched &&  createManualRuleForm.get('storageLocation')?.errors ">
+                                    {{labels.fieldrequired}}
+                                </mat-error> -->
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labels.unloadingpoint}}</mat-label>
+                                <mat-select formControlName="unloadingPoint">
+                                    <mat-option *ngFor="let i of unloadingPointDropDown" [value]="i"> {{i}} </mat-option>
+                                </mat-select>
+                                <mat-error style="color:red;"
+                                    *ngIf="createManualRuleForm.get('unloadingPoint')?.touched &&  createManualRuleForm.get('unloadingPoint')?.errors ">
+                                    {{labels.fieldrequired}}
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+            
+                        <div class="flex">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labels.testingmarket}}</mat-label>
+                                <mat-select formControlName="testingMarket">
+                                    <mat-option *ngFor="let i of testingMarketDropDown" [value]="i"> {{i}} </mat-option>
+                                </mat-select>
+                                <mat-error style="color:red;"
+                                    *ngIf="createManualRuleForm.get('testingMarket')?.touched &&  createManualRuleForm.get('testingMarket')?.errors ">
+                                    {{labels.fieldrequired}}
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labels.rulename}}</mat-label>
+                                <input matInput placeholder="" value="Rule name" formControlName="ruleName">
+                                <mat-error style="color:red;"
+                                    *ngIf="createManualRuleForm.get('ruleName')?.touched &&  createManualRuleForm.get('ruleName')?.errors ">
+                                    {{labels.fieldrequired}}
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labels.ruleoption}}</mat-label>
+                                <mat-select formControlName="ruleOption">
+                                    <mat-option *ngFor="let i of ruleOptionDropDown" [value]="i"> {{i}} </mat-option>
+                                </mat-select>
+                                <mat-error style="color:red;"
+                                    *ngIf="createManualRuleForm.get('ruleOption')?.touched &&  createManualRuleForm.get('ruleOption')?.errors ">
+                                    {{labels.fieldrequired}}
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labels.rulecategory}}</mat-label>
+                                <mat-select  formControlName="ruleCategory">
+                                    <mat-option *ngFor="let i of ruleCategoryDropDown" [value]="i"> {{i}} </mat-option>
+                                </mat-select>
+                                <mat-error style="color:red;"
+                                    *ngIf="createManualRuleForm.get('ruleCategory')?.touched &&  createManualRuleForm.get('ruleCategory')?.errors ">
+                                    {{labels.fieldrequired}}
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+            
+                        <div class="flex">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labels.express}}</mat-label>
+                                <mat-select  formControlName="express">
+                                <mat-option *ngFor="let i of expressDropdown" [value]="i"> {{i}} </mat-option>
+                            </mat-select>
+                                <mat-error style="color:red;"
+                                    *ngIf="createManualRuleForm.get('express')?.touched &&  createManualRuleForm.get('express')?.errors ">
+                                    {{labels.fieldrequired}}
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labels.validitydate}}</mat-label>
+                                    <mat-date-range-input [rangePicker]="picker">
+                                        <input matStartDate placeholder="Start date" formControlName="validityDate">
+                                        <input matEndDate placeholder="End date" formControlName="validityDate">
+                                    </mat-date-range-input>
+                                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-date-range-picker #picker></mat-date-range-picker>
+
+                                <mat-error style="color:red;"
+                                    *ngIf="createManualRuleForm.get('validityDate')?.touched && createManualRuleForm.get('validityDate')?.errors ">
+                                    {{labels.fieldrequired}}
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labels.status}}</mat-label>
+                                <mat-select  formControlName="status" >
+                                    <mat-option *ngFor="let i of statusDropDown" [value]="i" [readonly]="true" [disabled]="true"> {{i}} </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labels.value}}</mat-label>
+                                <input matInput placeholder="" value="Value" formControlName="value">
+                                <mat-error style="color:red;" *ngIf="createManualRuleForm.get('value')?.touched &&  createManualRuleForm.get('value')?.errors ">
+                                    {{labels.fieldrequired}}
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+            
+                        <div class="flex">
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labels.maxrparts}}</mat-label>
+                                <input matInput placeholder="" value="Max R-parts" formControlName="maxParts">
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <mat-label>{{labels.recieved}}</mat-label>
+                                <input matInput maxrparts placeholder="" value="Recieved" formControlName="recieved">
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" class="mr-462">
+                                <mat-label>{{labels.percentage}}</mat-label>
+                                <input type="number" matInput id="percentage" placeholder="" formControlName="percentage">
+                            </mat-form-field>
+                        </div>
+                   
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            {{labels.partsdata}}
+                        </mat-panel-title>
+                        <mat-panel-description>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <!-- <p>{{labels.partno}}</p> -->
+                    <div class="flex">
+                        <mat-form-field class="partNumberFullWidth" appearance="outline">
+                            <mat-label>{{labels.partNumber}}</mat-label>
+                            <mat-icon matSuffix (click)="partsNumberModel()">view_list</mat-icon>
+                            <input class="pnFormfield" matInput value="{{value}}" formControlName="partNumber">
+                        </mat-form-field>
+                    </div>
+                    <div class="flex">
+                    <mat-form-field appearance="fill">
+                        <mat-label>{{labels.damageMainPart}}</mat-label>
+                        <mat-select formControlName="damageMainPart">
+                            <mat-option *ngFor="let i of damageMainPartDropdown" [value]="i"> {{i}} </mat-option>
+                        </mat-select>
+                        <mat-error style="color:red;"
+                            *ngIf="createManualRuleForm.get('damageMainPart')?.touched &&  createManualRuleForm.get('damageMainPart')?.errors ">
+                            {{labels.fieldrequired}}
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>{{labels.redList}}</mat-label>
+                        <mat-select formControlName="redList">
+                            <mat-option *ngFor="let i of redListDropdown" [value]="i"> {{i}} </mat-option>
+                        </mat-select>
+                        <mat-error style="color:red;"
+                            *ngIf="createManualRuleForm.get('redList')?.touched &&  createManualRuleForm.get('redList')?.errors ">
+                            {{labels.fieldrequired}}
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>{{labels.yellowList}}</mat-label>
+                        <mat-select formControlName="yellowList">
+                            <mat-option *ngFor="let i of yellowListDropdown" [value]="i"> {{i}} </mat-option>
+                        </mat-select>
+                        <mat-error style="color:red;"
+                            *ngIf="createManualRuleForm.get('yellowList')?.touched &&  createManualRuleForm.get('yellowList')?.errors ">
+                            {{labels.fieldrequired}}
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>{{labels.returnValue}}</mat-label>
+                        <mat-select formControlName="returnValue">
+                            <mat-option *ngFor="let i of returnValueDropdown" [value]="i"> {{i}} </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    </div>
+
+                    <div class="flex">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labels.damageDate}}</mat-label>
+                            <input matInput formControlName="damageDate" [matDatepicker]="picker2">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                            <mat-error style="color:red;"
+                                *ngIf="createManualRuleForm.get('damageDate')?.touched && createManualRuleForm.get('damageDate')?.errors ">
+                                {{labels.fieldrequired}}
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labels.assemblyFlag}}</mat-label>
+                            <mat-select formControlName="assemblyFlag">
+                                <mat-option *ngFor="let i of assemblyFlagDropdown" [value]="i"> {{i}} </mat-option>
+                            </mat-select>
+                            <mat-error style="color:red;"
+                                *ngIf="createManualRuleForm.get('assemblyFlag')?.touched &&  createManualRuleForm.get('assemblyFlag')?.errors ">
+                                {{labels.fieldrequired}}
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labels.tgaClaimed}}</mat-label>
+                            <mat-select formControlName="tgaClaimed">
+                                <mat-option *ngFor="let i of tgaClaimedDropdown" [value]="i"> {{i}} </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labels.part}}</mat-label>
+                            <input matInput placeholder="" value="unit price of part" formControlName="part">
+                        </mat-form-field>
+                    </div>
+
+
+                    <div class="flex">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labels.partScope}}</mat-label>
+                            <input matInput formControlName="partScope">
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labels.opTime}}</mat-label>
+                            <input matInput formControlName="opTime">
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labels.valueLimits}}</mat-label>
+                            <mat-select formControlName="valueLimits">
+                                <mat-option *ngFor="let i of valueLimits" [value]="i"> {{i}} </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labels.serviceType}}</mat-label>
+                            <mat-select formControlName="serviceType">
+                                <!-- <mat-option> {{labels.serviceType}} </mat-option> -->
+                                <mat-option *ngFor="let i of serviceTypeDropdown" [value]="i"> {{i}} </mat-option>
+                            </mat-select>
+                            <mat-error style="color:red;"
+                                *ngIf="createManualRuleForm.get('serviceType')?.touched &&  createManualRuleForm.get('serviceType')?.errors ">
+                                {{labels.fieldrequired}}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            {{labels.vehicledata}}
+                        </mat-panel-title>
+                        <mat-panel-description>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <!-- <p>vehicle data</p> -->
+
+                    <div class="flex">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labels.category}}</mat-label>
+                            <input matInput formControlName="category">
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labels.subCategory}}</mat-label>
+                            <input matInput formControlName="subCategory">
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labels.finfromto}}</mat-label>
+                            <input matInput formControlName="finFromTo">
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labels.modelYearFromTo}}</mat-label>
+                            <mat-date-range-input [rangePicker]="picker3">
+                                <input matStartDate placeholder="Start date" formControlName="modelYearFromTo">
+                                <input matEndDate placeholder="End date" formControlName="modelYearFromTo">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matIconSuffix [for]="picker3"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker3></mat-date-range-picker>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="flex">
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labels.specialEquipments}}</mat-label>
+                            <mat-select formControlName="specialEquipments">
+                                <mat-option *ngFor="let i of specialEquipmentsDropdown" [value]="i"> {{i}} </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labels.runningTimeInMonths}}</mat-label>
+                            <input matInput type="number" formControlName="runningTimeInMonths">
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labels.mileageFromTo}}</mat-label>
+                            <input matInput formControlName="mileageFromTo">
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labels.unitKmMiles}}</mat-label>
+                            <mat-select formControlName="unitKmMiles">
+                                <mat-option *ngFor="let i of unitKmMilesDropdown" [value]="i"> {{i}} </mat-option>
+                            </mat-select>
+                            <mat-error style="color:red;"
+                                *ngIf="createManualRuleForm.get('unitKmMiles')?.touched &&  createManualRuleForm.get('unitKmMiles')?.errors ">
+                                {{labels.fieldrequired}}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="flex">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Registration Date (From-To)</mat-label>
+                            <input matInput formControlName="registrationDateFromTo" (click)="showRegistrationDate()" readonly>
+                          </mat-form-field>
+
+                       <div class="container" *ngIf=dateEnabled>
+                          <span>
+                            <mat-label>from</mat-label>
+                            <input matInput [matDatepicker]="datePickerB" formControlName="fromDateRegistration" class="wdith-10">
+                            <mat-datepicker-toggle matSuffix [for]="datePickerB" class="calender-style"></mat-datepicker-toggle>
+                            <mat-datepicker #datePickerB></mat-datepicker>
+                        </span>
+                        <span>
+                            <mat-label>to</mat-label>
+                            <input matInput [matDatepicker]="datePickerC" formControlName="toDateRegistration" class="wdith-10">
+                            <mat-datepicker-toggle matSuffix [for]="datePickerC"></mat-datepicker-toggle>
+                            <mat-datepicker #datePickerC></mat-datepicker>
+                        </span>
+                       </div>
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>{{labels.damageBefore}}</mat-label>
+                            <mat-select formControlName="damageBefore">
+                                <mat-option *ngFor="let i of damageBeforeDropdown" [value]="i"> {{i}} </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" class="mr-462">
+                            <mat-label>{{labels.productionDateFromTo}}</mat-label>
+                            <mat-date-range-input [rangePicker]="picker5">
+                                <input matStartDate placeholder="Start date" formControlName="productionDateFromTo">
+                                <input matEndDate placeholder="End date" formControlName="productionDateFromTo">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matIconSuffix [for]="picker5"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker5></mat-date-range-picker>
+                        </mat-form-field>
+                    </div>
+
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            {{labels.dealerpublishinginformation}}
+                        </mat-panel-title>
+                        <mat-panel-description>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <!-- <p>{{labels.dealerinfo}}</p> -->
+                    <div class="flex">
+                        <mat-form-field appearance="fill" class="dealerNumberField">
+                            <mat-label>{{labels.dealerNumber}}</mat-label>
+                            <input matInput class="input-field" formControlName="dealerNumber">
+                        </mat-form-field>
+
+                        <mat-form-field class="documentWidth" style="width: 68%;">
+                            <mat-label>{{labels.documents}}</mat-label>
+                            <mat-select [formControl]="documentsControl" multiple  #select (selectionChange)="onSelectionChange($event.value)">
+                              <mat-select-trigger>
+                                <mat-chip-list>
+                                  <mat-chip *ngFor="let doc of documentsControl.value" [selectable]="true" [removable]="true" (removed)="remove(doc)">
+                                    {{doc.name}}
+                                    <mat-icon matChipRemove>cancel</mat-icon>
+                                  </mat-chip>
+                                </mat-chip-list>
+                              </mat-select-trigger>
+                              <mat-option *ngFor="let docArrayValue of documentArray" [value]="docArrayValue">
+                                <mat-checkbox [checked]="documentsControl.value?.includes(docArrayValue)">{{docArrayValue.name}}</mat-checkbox>
+                              </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <mat-form-field class="textAreafullWidth" appearance="fill">
+                        <mat-label>{{labels.messageToDealer}}</mat-label>
+                        <textarea matInput value="Lorem ipsum" formControlName="messageToDealer"></textarea>
+                    </mat-form-field>
+
+                </mat-expansion-panel>
+            </form>
+            </mat-accordion>
+            
+            <div class="outer">
+                <div class="inner">
+                    <button mat-raised-button color="primary" (click)="showSummary()">{{labels.review}}</button>
+                    <button mat-raised-button color="primary" [hidden]="hideSaveButton" [disabled]="createManualRuleForm.pristine && disableSave" class="mr-25"
+                        (click)="onSave()">{{labels.save}}</button>
+                    <button mat-raised-button color="primary" (click)="onEditCancelClick()">{{labels.cancel}}</button>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    <mat-icon  *ngIf="insideShowSummary" class="auditassignment">assignment</mat-icon>
+    <button *ngIf="insideShowSummary"  mat-raised-button color="primary" class="btnauditLog"(click)="btnauditLog(createManualRuleUserData?.ruleId)">{{labels.auditLog}} </button>
+
+<div *ngIf="showCreateRulePanels === false">
+    <div class="summary">
+        {{labels.summary}}
+        <span class="createRuleSuccess">
+            <mat-card *ngIf="createRuleSuccessMsg" >
+                <mat-card-content>
+                    <img style="padding-right: 10px;" src="assets/icons/tick.svg" alt="tick mark">
+                    {{labels.createdRuleSuccessully | uppercase}}</mat-card-content>
+              </mat-card>
+        </span>
+        <span class="createRuleSuccess">
+            <mat-card *ngIf="updateRuleSuccessMsg" >
+                <mat-card-content>
+                    <img style="padding-right: 10px;" src="assets/icons/tick.svg" alt="tick mark">
+                    {{labels.updatedRuleSuccessully | uppercase}}</mat-card-content>
+              </mat-card>
+        </span>
+    </div>
+    <span class="ruleId" *ngIf="ruleID">({{labels.ruleID}} {{createManualRuleUserData.ruleId}}) </span>
+
+    <div class="container-fluid table-section">
+
+        <!-- Market and Location  -->
+        <div class="row">
+            <div class="header">{{labels.marketlocation}}</div>
+            <div class="col-md-4">
+                <table>
+                   <tbody>
+                    <tr>{{labels.market}}<span>{{labels.asterisk}}</span>
+                        <td>{{createManualRuleUserData.market}}</td>
+                    </tr>
+                    
+                    <tr>{{labels.warrantyfactory}}<span>{{labels.asterisk}}</span>
+                        <td>{{createManualRuleUserData.warrantyFactory}}</td>
+                    </tr>
+                   
+                    <tr>{{labels.storagelocation}}
+                        <td>{{createManualRuleUserData.storageLocation}}</td>
+                    </tr>
+                    <tr>{{labels.unloadingpoint}}<span>{{labels.asterisk}}</span>
+                        <td>{{createManualRuleUserData.unloadingPoint}}</td>
+                    </tr>
+                   
+                    <tr>{{labels.testingmarket}}<span>{{labels.asterisk}}</span>
+                        <td>{{createManualRuleUserData.testingMarket}}</td>
+                    </tr>
+                   
+                   </tbody>
+                </table>
+            </div>
+            <div class="col-md-5">
+                <table>
+                   <tbody>
+                    <tr>{{labels.rulename}}<span>{{labels.asterisk}}</span>
+                        <td>{{createManualRuleUserData.ruleName}}</td>
+                    </tr>
+                    
+                    <tr>{{labels.ruleoption}}<span>{{labels.asterisk}}</span>
+                        <td>{{createManualRuleUserData.ruleOption}}</td>
+                    </tr>
+                   
+                    <tr>{{labels.rulecategory}}<span>{{labels.asterisk}}</span>
+                        <td>{{createManualRuleUserData.ruleCategory}}</td>
+                    </tr>
+                   
+                    <tr>{{labels.express}}<span>{{labels.asterisk}}</span>
+                        <td>{{createManualRuleUserData.express}}</td>
+                    </tr>
+                   
+                    <tr>{{labels.validitydate}}<span>{{labels.asterisk}}</span>
+                        <td>{{createManualRuleUserData.validityDate}}</td>
+                    </tr>
+                   </tbody>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <table>
+                   <tbody>
+                    <tr>{{labels.status}}
+                        <td>{{createManualRuleUserData.status}}</td>
+                    </tr>
+                    
+                    <tr>{{labels.value}}
+                        <td>{{createManualRuleUserData.value}}</td>
+                    </tr>
+                   
+                    <tr>{{labels.maxrparts}}
+                        <td>{{createManualRuleUserData.maxParts}}</td>
+                    </tr>
+                    <tr>{{labels.recieved}}
+                        <td>{{createManualRuleUserData.recieved}}</td>
+                    </tr>
+                   
+                    <tr>{{labels.percentage}}
+                        <td>{{createManualRuleUserData.percentage}}</td>
+                    </tr>
+                   
+                   </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Parts data  -->
+
+        <div class="row">
+            <div class="header">{{labels.partData}}</div>
+            <div class="col-md-4">
+                <table>
+                   <tbody>
+                    <tr>{{labels.partNumber}}
+                        <td>{{createManualRuleUserData.partNumber}}</td>
+                    </tr>
+                    
+                    <tr>{{labels.damageMainPart}}<span>{{labels.asterisk}}</span>
+                        <td>{{createManualRuleUserData.damageMainPart}}</td>
+                    </tr>
+                   
+                    <tr>{{labels.redList}}<span>{{labels.asterisk}}</span>
+                        <td>{{createManualRuleUserData.redList}}</td>
+                    </tr>
+                    <tr>{{labels.yellowList}}<span>{{labels.asterisk}}</span>
+                        <td>{{createManualRuleUserData.yellowList}}</td>
+                    </tr>
+                   
+                    <tr>{{labels.returnValue}}
+                        <td>{{createManualRuleUserData.returnValue}}</td>
+                    </tr>
+                   
+                   </tbody>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <table>
+                   <tbody>
+                    
+                    <tr>{{labels.assemblyFlag}}<span>{{labels.asterisk}}</span>
+                        <td>{{createManualRuleUserData.assemblyFlag}}</td>
+                    </tr>
+                   
+                    <tr>{{labels.tgaClaimed}}
+                        <td>{{createManualRuleUserData.tgaClaimed}}</td>
+                    </tr>
+                   
+                    <tr>{{labels.part}}
+                        <td>{{createManualRuleUserData.part}}</td>
+                    </tr>
+                   
+                    <tr>{{labels.partScope}}
+                        <td>{{createManualRuleUserData.partScope}}</td>
+                    </tr>
+                   </tbody>
+                </table>
+            </div>
+            <div class="col-md-5">
+                <table>
+                   <tbody>
+                    <tr>{{labels.opTime}}
+                        <td>{{createManualRuleUserData.opTime}}</td>
+                    </tr>
+                    
+                    <tr>{{labels.valueLimits}}
+                        <td>{{createManualRuleUserData.valueLimits}}</td>
+                    </tr>
+                   
+                    <tr>{{labels.serviceType}}<span>{{labels.asterisk}}</span>
+                        <td>{{createManualRuleUserData.serviceType}}</td>
+                    </tr>
+
+                    <tr>{{labels.damageDate}}
+                        <td>{{createManualRuleUserData.damageDate}}</td>
+                    </tr>
+                   
+                   </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Vehicle data -->
+
+        <div class="row">
+            <div class="header">{{labels.vehicledata}}</div>
+            <div class="col-md-4">
+                <table>
+                   <tbody>
+                    <tr>{{labels.category}}
+                        <td>{{createManualRuleUserData.category}}</td>
+                    </tr>
+                    
+                    <tr>{{labels.subCategory}}
+                        <td>{{createManualRuleUserData.subCategory}}</td>
+                    </tr>
+                   
+                    <tr>{{labels.finfromto}}
+                        <td>{{createManualRuleUserData.finFromTo}}</td>
+                    </tr>
+
+                    <tr>{{labels.damageBefore}}
+                        <td>{{createManualRuleUserData.damageBefore}}</td>
+                    </tr>
+                                      
+                   </tbody>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <table>
+                   <tbody>
+                    <tr>{{labels.specialEquipments}}
+                        <td>{{createManualRuleUserData.specialEquipments}}</td>
+                    </tr>
+
+                    <tr>{{labels.runningTimeInMonths}}
+                        <td>{{createManualRuleUserData.runningTimeInMonths}}</td>
+                    </tr>
+                    
+                    <tr>{{labels.mileageFromTo}}
+                        <td>{{createManualRuleUserData.mileageFromTo}}</td>
+                    </tr>
+                   
+                    <tr>{{labels.unitKmMiles}}<span>{{labels.asterisk}}</span>
+                        <td>{{createManualRuleUserData.unitKmMiles}}</td>
+                    </tr>
+
+                   </tbody>
+                </table>
+            </div>
+            <div class="col-md-5">
+                <table>
+                   <tbody>
+                    <tr>{{labels.registrationDateFromTo}}
+                        <td>{{createManualRuleUserData.registrationDateFromTo}}</td>
+                    </tr>
+                    
+                    <tr>{{labels.modelYearFromTo}}
+                        <td>{{createManualRuleUserData.modelYearFromTo}}</td>
+                    </tr>
+                   
+                    <tr>{{labels.productionDateFromTo}}
+                        <td>{{createManualRuleUserData.productionDateFromTo}}</td>
+                    </tr>
+                   
+                   </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Dealer & Publishing information -->
+
+        <div class="row">
+            <div class="header">{{labels.dealerpublishinginformation}}</div>
+            <div class="col-md-4">
+                <table>
+                   <tbody>
+                    <tr>{{labels.dealerNumber}}
+                        <td>{{createManualRuleUserData.dealerNumber}}</td>
+                    </tr>
+                    
+                    <tr>{{labels.documents}}
+                        <td>{{createManualRuleUserData.documentsControl}}</td>
+                    </tr>
+                   
+                    <tr>{{labels.messageToDealer}}
+                        <td>{{createManualRuleUserData.messageToDealer}}</td>
+                    </tr>
+                   
+                   </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="createRuleBtn">
+        <span style="padding-right: 21px;"> <button mat-raised-button color="primary" [disabled]="disableCreateRule" [hidden]="!showCreateRuleButton" (click)="onCreateRuleClick()">{{labels.createRule}}</button></span>
+        <span> <button mat-raised-button color="primary" (click)="onUpdateRuleClick()" *ngIf="enableUpdateRuleButton">{{labels.updateRule}}</button></span>
+        <span> <button mat-raised-button color="primary" [hidden]="!showDisableButton" (click)="onDisableClicked()" *ngIf="showDisableButton">{{labels.disableRule}}</button></span>
+        <span> <button mat-raised-button color="primary" [hidden]="hideDuplicateButton"  (click)="onCopyRuleClicked(createManualRuleUserData.ruleId)" *ngIf="showDuplicateButton">{{labels.duplicateRule}}</button></span>
+        <span> <button mat-raised-button color="primary" (click)="backToCreateRulePanel()" *ngIf="hideBackButton">{{labels.back}}</button></span>
+
+    </div>
+</div>
